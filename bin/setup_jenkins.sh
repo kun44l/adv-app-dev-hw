@@ -27,7 +27,7 @@ oc new-build -D $'FROM docker.io/openshift/jenkins-agent-maven-35-centos7:v3.11\
 echo "apiVersion: v1
 items:
 - kind: "BuildConfig"
-  apiVersion: "v1"
+  apiVersion: v1
   metadata:
     name: "tasks-pipeline"
   spec:
@@ -39,6 +39,13 @@ items:
     strategy:
       type: "JenkinsPipeline"
       jenkinsPipelineStrategy:
+        env:
+        - name: CLUSTER
+          value: "${CLUSTER}"
+        - name: GUID
+          value: "${GUID}"
+        - name: REPO
+          value: "${REPO}"
         jenkinsfilePath: Jenkinsfile
 kind: List
 metadata: []" | oc create -f - -n ${GUID}-jenkins

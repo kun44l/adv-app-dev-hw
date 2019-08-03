@@ -18,8 +18,8 @@ oc new-app ${GUID}-tasks-dev/tasks:0.0 --name=tasks-blue --allow-missing-imagest
 oc set triggers dc/tasks-blue --remove-all -n ${GUID}-tasks-prod
 oc expose dc tasks-blue --port 8080 -n ${GUID}-tasks-prod
 oc create configmap tasks-blue-config --from-literal="application-users.properties=Placeholder" --from-literal="application-roles.properties=Placeholder" -n ${GUID}-tasks-prod
-oc set volume dc/tasks-blue --add --name=jboss-config --mount-path=/opt/eap/standalone/configuration/application-users.properties --sub-path=application-users.properties --overwrite --configmap-name=tasks-blue-config -n ${GUID}-tasks-prod
-oc set volume dc/tasks-blue --add --name=jboss-config1 --mount-path=/opt/eap/standalone/configuration/application-roles.properties --sub-path=application-roles.properties --overwrite --configmap-name=tasks-blue-config -n ${GUID}-tasks-prod
+oc set volume dc/tasks-blue --add --overwrite --name=jboss-config --mount-path=/opt/eap/standalone/configuration/application-users.properties --sub-path=application-users.properties --configmap-name=tasks-blue-config -n ${GUID}-tasks-prod
+oc set volume dc/tasks-blue --add --overwrite --name=jboss-config1 --mount-path=/opt/eap/standalone/configuration/application-roles.properties --sub-path=application-roles.properties --configmap-name=tasks-blue-config -n ${GUID}-tasks-prod
 oc set probe dc/tasks-blue --readiness --get-url=http://:8080/ --initial-delay-seconds=90 --timeout-seconds=1 -n ${GUID}-tasks-prod
 oc set probe dc/tasks-blue --liveness --get-url=http://:8080/ --initial-delay-seconds=90 --timeout-seconds=1 -n ${GUID}-tasks-prod
 # Setting 'wrong' VERSION. This will need to be updated in the pipeline
@@ -31,8 +31,8 @@ oc new-app ${GUID}-tasks-dev/tasks:0.0 --name=tasks-green --allow-missing-images
 oc set triggers dc/tasks-green --remove-all -n ${GUID}-tasks-prod
 oc expose dc tasks-green --port 8080 -n ${GUID}-tasks-prod
 oc create configmap tasks-green-config --from-literal="application-users.properties=Placeholder" --from-literal="application-roles.properties=Placeholder" -n ${GUID}-tasks-prod
-oc set volume dc/tasks-green --add --name=jboss-config --mount-path=/opt/eap/standalone/configuration/application-users.properties --sub-path=application-users.properties --overwrite --configmap-name=tasks-green-config -n ${GUID}-tasks-prod
-oc set volume dc/tasks-green --add --name=jboss-config1 --mount-path=/opt/eap/standalone/configuration/application-roles.properties --sub-path=application-roles.properties --overwrite --configmap-name=tasks-green-config -n ${GUID}-tasks-prod
+oc set volume dc/tasks-green --add --overwrite --name=jboss-config --mount-path=/opt/eap/standalone/configuration/application-users.properties --sub-path=application-users.properties --configmap-name=tasks-green-config -n ${GUID}-tasks-prod
+oc set volume dc/tasks-green --add --overwrite --name=jboss-config1 --mount-path=/opt/eap/standalone/configuration/application-roles.properties --sub-path=application-roles.properties --configmap-name=tasks-green-config -n ${GUID}-tasks-prod
 oc set probe dc/tasks-green --readiness --get-url=http://:8080/ --initial-delay-seconds=90 --timeout-seconds=1 -n ${GUID}-tasks-prod
 oc set probe dc/tasks-green --liveness --get-url=http://:8080/ --initial-delay-seconds=90 --timeout-seconds=1 -n ${GUID}-tasks-prod
 # Setting 'wrong' VERSION. This will need to be updated in the pipeline
