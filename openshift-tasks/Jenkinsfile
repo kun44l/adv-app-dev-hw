@@ -142,7 +142,7 @@ podTemplate(
 
       // Blue/Green Deployment into Production
       // -------------------------------------
-      def destApp   = "tasks-green"
+      def destApp   = ""
       def activeApp = ""
 
       stage('Blue/Green Production Deployment') {
@@ -166,7 +166,6 @@ podTemplate(
             //  Set Image
             //  Update the Image on the Production Deployment Config
             dc.spec.template.spec.containers[0].image="docker-registry.default.svc:5000/${devProject}/tasks:${prodTag}"
-            openshift.apply(dc)
 
             // Set VERSION
             openshift.set("env", "dc/${destApp}", "VERSION='${prodTag} (${destApp})'")
@@ -176,6 +175,7 @@ podTemplate(
             def configmap = openshift.create("configmap", "${destApp}-config", "--from-file=./configuration/application-users.properties", "--from-file=./configuration/application-roles.properties" )
 
             //  Deploy the inactive application.
+            openshift.apply(dc)
             openshift.selector("dc", "${destApp}").rollout().latest()
 
             //  Make sure the application is running and ready before proceeding
