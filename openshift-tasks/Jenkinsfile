@@ -151,10 +151,10 @@ podTemplate(
             // TBD: Determine which application is active
             activeApp = openshift.selector("route", "tasks").object().spec.to.name
             if ( activeApp == "tasks-green") {
-              destApp == "tasks-blue"
+              destApp = "tasks-blue"
             }
             if ( activeApp == "tasks-blue") {
-              destApp == "tasks-green"
+              destApp = "tasks-green"
             }
 
             echo "Active Application:      " + activeApp
