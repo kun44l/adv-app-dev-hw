@@ -142,7 +142,7 @@ podTemplate(
 
       // Blue/Green Deployment into Production
       // -------------------------------------
-      def destApp   = ""
+      def destApp   = "tasks-green"
       def activeApp = ""
 
       stage('Blue/Green Production Deployment') {
@@ -187,7 +187,7 @@ podTemplate(
               sleep 5
               rc_prod = openshift.selector("rc", "${destApp}-${dc_version}").object()
             }
-
+            sleep 30
             echo "Currently active in PROD is the app - ${activeApp}"
           }
         }
