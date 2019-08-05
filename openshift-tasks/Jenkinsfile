@@ -159,15 +159,17 @@ podTemplate(
 
             echo "Active Application:      " + activeApp
             echo "Destination Application: " + destApp
-            
-            //  Set Image, Set VERSION
-            
+          
             //  Deploy into the other application
             def dc = openshift.selector("dc/${destApp}").object()
-
+            
+            //  Set Image
             //  Update the Image on the Production Deployment Config
             dc.spec.template.spec.containers[0].image="docker-registry.default.svc:5000/${devProject}/tasks:${prodTag}"
             openshift.apply(dc)
+
+            // Set VERSION
+            openshift.set("env", "dc/${destApp}", "VERSION='${prodTag} (${destApp})'")
 
             //  Update Config Map in change config files changed in the source
             openshift.selector("configmap", "${destApp}-config").delete()
